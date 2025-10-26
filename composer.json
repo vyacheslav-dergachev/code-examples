@@ -47,6 +47,7 @@
         "twig/twig": "^2.12 || ^3.0"
     },
     "require-dev": {
+        "brianium/paratest": "^7.14",
         "ergebnis/composer-normalize": "^2.48",
         "phpro/grumphp": "*",
         "phpstan/extension-installer": "^1.4",

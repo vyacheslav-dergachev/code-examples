@@ -1,0 +1,19 @@
+parameters:
+    scanDirectories:
+        - var/cache
+    level: 8
+    tmpDir: ./var/cache/phpstan
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Infrastructure/CodeStyle/*
+    symfony:
+        containerXmlPath: var/cache/dev/Infrastructure_KernelDevDebugContainer.xml
+    doctrine:
+        objectManagerLoader: tests/Utils/Services/PHPStan/object-manager.php
+    additionalConstructors:
+        - PHPUnit\Framework\TestCase::setUp
+    reportUnmatchedIgnoredErrors: false
+rules:
+    - Infrastructure\CodeStyle\PHPStan\MissingReadOnlyPropertyAssignRule

@@ -62,10 +62,6 @@ deployer/configs/hosts.prod.local.php
 /.deptrac.cache
 ###< qossmic/deptrac-shim ###
 
-###> phpstan/phpstan ###
-phpstan.neon
-###< phpstan/phpstan ###
-
 ###> squizlabs/php_codesniffer ###
 /.phpcs-cache
 /phpcs.xml
