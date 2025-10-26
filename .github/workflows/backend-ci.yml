@@ -1,0 +1,88 @@
+name: Backend Continuous Integration
+
+on:
+    pull_request:
+        types: [opened, reopened, synchronize]
+        paths:
+            - bin/**
+            - config/**
+            - migrations/**
+            - public/**
+            - src/**
+            - tests/**
+            - composer.json
+            - composer.lock
+            - templates/**
+            - translations/**
+            - .env
+            - .env.test
+            - deptrac.yaml
+            - grumphp.yaml
+            - phpcs_custom_ruleset.xml
+            - phpstan.neon
+            - phpunit.xml.dist
+
+jobs:
+    backend-tests:
+        name: Symfony 7.3 (PHP ${{ matrix.php-versions }})
+        # https://hub.docker.com/_/ubuntu/
+        runs-on: ubuntu-22.04
+        strategy:
+            fail-fast: true
+            matrix:
+                php-versions: ['8.3']
+        steps:
+            # https://github.com/actions/checkout (official)
+            -   name: Checkout
+                uses: actions/checkout@v4
+
+            -   name: Install aspell
+                run: |
+                    sudo apt install aspell aspell-en aspell-ru
+
+            -   name: Start MySQL
+                run: |
+                    sudo systemctl start mysql
+                    mysql --version
+
+            # https://github.com/shivammathur/setup-php (community)
+            -   name: Setup PHP, extensions and composer
+                uses: shivammathur/setup-php@verbose
+                with:
+                    php-version: ${{ matrix.php-versions }}
+                    extensions: posix, dom, curl, libxml, imagick, intl, bcmath, opcache, zip, bz2, calendar, gd, mysqli, pdo, pdo_mysql, soap, sockets, exif, sysvsem, gettext, mbstring, xml, ctype, iconv, filter, json, mbstring
+                    coverage: pcov
+                env:
+                    fail-fast: true
+
+            -   name: Get composer cache directory
+                id: composer-cache
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            # https://help.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows
+            -   name: Cache composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
+
+            -   name: Copy ENV configuration
+                run: cp .env.pipelines .env.test.local
+
+            -   name: Install Composer dependencies
+                run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+            -   name: Run yaml lint on config files
+                uses: karancode/yamllint-github-action@master
+                with:
+                    yamllint_file_or_dir: "config"
+                    yamllint_strict: false
+                    yamllint_comment: true
+                    yamllint_config_datapath: ".yamllint.yaml"
+
+            -   name: Run lints
+                run: php -dmemory_limit=512M vendor/bin/grumphp run
+
+            -   name: Run tests
+                run: php vendor/bin/paratest --runner=WrapperRunner

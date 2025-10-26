@@ -1,0 +1,77 @@
+# https://github.com/phpro/grumphp#configuration
+grumphp:
+    git_hook_variables:
+        EXEC_GRUMPHP_COMMAND: 'docker compose --project-directory docker exec -u1000 php'
+    process_timeout: 600
+    fixer:
+        enabled: false
+        fix_by_default: false
+    tasks:
+        composer_normalize:
+            indent_size: ~
+            indent_style: ~
+            no_check_lock: false
+            no_update_lock: false
+            verbose: false
+            metadata:
+                blocking: true
+                enabled: true
+                label: null
+                priority: 3
+                task: null
+        git_commit_message:
+            allow_empty_message: false
+            enforce_capitalized_subject: true
+            enforce_no_subject_punctuations: true
+            enforce_no_subject_trailing_period: true
+            enforce_single_lined_subject: true
+            type_scope_conventions: [ ]
+            max_body_width: 72
+            max_subject_width: 72
+            matchers:
+                Must contain issue number: /^(CE-\d+)\s+([A-Z][a-zA-Z\d\s\_\-`'\/]+)$/
+            case_insensitive: false
+            multiline: true
+            additional_modifiers: ''
+            metadata:
+                blocking: true
+                enabled: true
+                label: null
+                priority: 3
+                task: null
+        phpstan:
+            memory_limit: 768M
+            use_grumphp_paths: false
+            configuration: phpstan.neon
+            metadata:
+                blocking: true
+                enabled: true
+                label: null
+                priority: 2
+                task: null
+        phpcs:
+            standard: phpcs_custom_ruleset.xml
+            whitelist_patterns:
+                - /^src\/(.*)/
+                - /^tests\/Application\/(.*)/
+                - /^tests\/Domain\/(.*)/
+                - /^tests\/Infrastructure\/(.*)/
+                - /^tests\/TestCases\/(.*)/
+                - /^tests\/UserInterface\/(.*)/
+            metadata:
+                blocking: true
+                enabled: true
+                label: null
+                priority: 1
+                task: null
+        deptrac:
+            cache_file: var/cache/.deptrac.cache
+            depfile: deptrac.yaml
+            formatter: ~
+            output: ~
+            metadata:
+                blocking: true
+                enabled: true
+                label: null
+                priority: 0
+                task: null

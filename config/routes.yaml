@@ -1,0 +1,4 @@
+api:
+    host: ['%api_domain%', '%nginx_host%']
+    resource: ../src/UserInterface/Http/Api
+    type: attribute
