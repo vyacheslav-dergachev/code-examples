@@ -2,7 +2,9 @@
 
 namespace Infrastructure\Persistence\Doctrine\Repositories\Department;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Domain\Department\Collections\DepartmentCollection;
 use Domain\Department\Entities\Department;
 use Domain\Department\Repositories\DepartmentRepositoryInterface;
 use Domain\SeedWork\Id\Uuid;
@@ -43,14 +45,11 @@ final readonly class DepartmentRepository implements DepartmentRepositoryInterfa
             ->findOneBy(['id' => $id->toBinary()]);
     }
 
-    /**
-     * @return list<Department>
-     */
-    public function findAll(): array
+    public function findAll(): DepartmentCollection
     {
-        return $this->entityManager
-            ->getRepository(Department::class)
-            ->findAll();
+        $departments = $this->entityManager->getRepository(Department::class)->findAll();
+
+        return new DepartmentCollection(new ArrayCollection($departments));
     }
 
     public function findByCity(string $city): ?Department

@@ -2,6 +2,7 @@
 
 namespace Domain\Department\Repositories;
 
+use Domain\Department\Collections\DepartmentCollection;
 use Domain\Department\Entities\Department;
 use Domain\SeedWork\Id\Uuid;
 
@@ -16,10 +17,7 @@ interface DepartmentRepositoryInterface
 
     public function findById(Uuid $id): ?Department;
 
-    /**
-     * @return list<Department>
-     */
-    public function findAll(): array;
+    public function findAll(): DepartmentCollection;
 
     public function findByCity(string $city): ?Department;
 }

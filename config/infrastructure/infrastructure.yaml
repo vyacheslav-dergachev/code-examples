@@ -6,3 +6,13 @@ services:
 
     Infrastructure\Kernel:
         class: Infrastructure\Kernel
+
+    Infrastructure\Geo\GeoLocationService:
+        class: Infrastructure\Geo\GeoLocationService
+
+    Infrastructure\Geo\CachedGeoLocationService:
+        arguments:
+            $geoLocationService: '@Infrastructure\Geo\GeoLocationService'
+            $cacheTtl: 86400
+
+    Application\Geo\GeoLocationServiceInterface: '@Infrastructure\Geo\CachedGeoLocationService'

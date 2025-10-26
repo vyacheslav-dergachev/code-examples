@@ -20,6 +20,18 @@ final class Version20251026141535 extends AbstractMigration
         $departments = [
             [
                 'id' => Uuid::v7()->toBinary(),
+                'name' => 'Kremlin',
+                'city' => 'Moscow',
+                'phone' => '+7-800-200-23-16'
+            ],
+            [
+                'id' => Uuid::v7()->toBinary(),
+                'name' => 'Smolny',
+                'city' => 'Saint Petersburg',
+                'phone' => '+7-812-576-78-06'
+            ],
+            [
+                'id' => Uuid::v7()->toBinary(),
                 'name' => 'Human Resources',
                 'city' => 'New York',
                 'phone' => '+1-555-0101'
@@ -61,7 +73,7 @@ final class Version20251026141535 extends AbstractMigration
     public function down(Schema $schema): void
     {
         $this->addSql("DELETE FROM departments WHERE name IN (
-            'Human Resources', 'Engineering', 'Marketing', 'Sales', 'Finance'
+            'Kremlin', 'Smolny', 'Human Resources', 'Engineering', 'Marketing', 'Sales', 'Finance'
         )");
     }
 }
