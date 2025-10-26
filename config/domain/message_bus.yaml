@@ -1,0 +1,57 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Domain\MessageBus\CommandBusInterface:
+        class: Infrastructure\MessageBus\CommandBus
+
+    Domain\MessageBus\AsyncCommandBusInterface:
+        class: Infrastructure\MessageBus\AsyncCommandBus
+
+    Domain\MessageBus\QueryBusInterface:
+        class: Infrastructure\MessageBus\QueryBus
+
+    Domain\MessageBus\EventBusInterface:
+        class: Infrastructure\MessageBus\EventBus
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+            public: false
+
+        Infrastructure\MessageBus\CommandBus: ~
+        Infrastructure\MessageBus\AsyncCommandBus:
+        Infrastructure\MessageBus\AsyncCommandBusStub: ~
+        Infrastructure\MessageBus\QueryBus: ~
+        Infrastructure\MessageBus\EventBus: ~
+        Infrastructure\MessageBus\EventBusStub: ~
+
+        Domain\MessageBus\CommandBusInterface:
+            class: Infrastructure\MessageBus\TestCommandBus
+            public: true
+            arguments:
+                $commandBus: '@Infrastructure\MessageBus\CommandBus'
+
+        Domain\MessageBus\AsyncCommandBusInterface:
+            class: Infrastructure\MessageBus\TestAsyncCommandBus
+            public: true
+            arguments:
+                $realAsyncCommandBus: '@Infrastructure\MessageBus\AsyncCommandBus'
+                $asyncCommandBusStub: '@Infrastructure\MessageBus\AsyncCommandBusStub'
+
+        Domain\MessageBus\QueryBusInterface:
+            class: Infrastructure\MessageBus\TestQueryBus
+            public: true
+            arguments:
+                $queryBus: '@Infrastructure\MessageBus\QueryBus'
+
+        Domain\MessageBus\EventBusInterface:
+            class: Infrastructure\MessageBus\TestEventBus
+            public: true
+            arguments:
+                $realEventBus: '@Infrastructure\MessageBus\EventBus'
+                $eventBusStub: '@Infrastructure\MessageBus\EventBusStub'
