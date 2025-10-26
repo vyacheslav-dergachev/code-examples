@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    Domain\Department\Queries\Handlers\:
+        resource: '%kernel.project_dir%/src/Domain/Department/Queries/Handlers/'
+
+    Domain\Department\Repositories\DepartmentRepositoryInterface:
+        class: Infrastructure\Persistence\Doctrine\Repositories\Department\DepartmentRepository
+
