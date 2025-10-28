@@ -1,0 +1,27 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    # Auto-register handlers directory
+    Domain\Department\Queries\Handlers\:
+        resource: '%kernel.project_dir%/src/Domain/Department/Queries/Handlers/'
+
+    # Services directory
+    Domain\Department\Services\:
+        resource: '%kernel.project_dir%/src/Domain/Department/Services/'
+
+    # Repository with caching decorator
+    Infrastructure\Persistence\Doctrine\Repositories\Department\DepartmentRepository: ~
+
+    Infrastructure\Persistence\Doctrine\Repositories\Department\CachedDepartmentRepository:
+        decorates: Infrastructure\Persistence\Doctrine\Repositories\Department\DepartmentRepository
+        arguments:
+            $decorated: '@.inner'
+            $cache: '@cache.app'
+            $cacheTtl: 2628000 # 30 days
+
+    # Repository interface binding (points to cached version)
+    Domain\Department\Repositories\DepartmentRepositoryInterface:
+        alias: Infrastructure\Persistence\Doctrine\Repositories\Department\CachedDepartmentRepository

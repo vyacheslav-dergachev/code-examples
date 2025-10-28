@@ -98,5 +98,12 @@ services:
             - ../:/var/www/public
             - ./nginx/sites:/etc/nginx/conf.d
 
+    redis:
+        image: redis:8.2-alpine
+        command: redis-server --requirepass password
+        ports:
+            - "6379:6379"
+        container_name: code_examples_redis
+
 volumes:
     mysql-data:
