@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { getCookie, setCookie } from "../utils/cookies";
 import { useDepartmentStore } from "../store/departmentStore";
 import { Department } from "../types/department";
+import { DEFAULT_DEPARTMENT } from "../constants/department";
 
 export function useDepartment() {
   const {
@@ -32,12 +33,7 @@ export function useDepartment() {
   useEffect(() => {
     const initializeDepartment = async (): Promise<void> => {
       const departments = await fetchAllDepartments();
-      const defaultDepartment: Department | null = departments.length > 0 ? departments[0] : null;
-
-      if (!defaultDepartment) {
-        setLoading(false);
-        return;
-      }
+      const defaultDepartment: Department = departments.length > 0 ? departments[0] : DEFAULT_DEPARTMENT;
 
       const existing = getCookie("department");
       if (existing) {
@@ -114,13 +110,9 @@ export function useDepartment() {
   };
 
   const closeModal = () => {
-    const defaultDepartment: Department | null = allDepartments.length > 0 ? allDepartments[0] : null;
-    if (defaultDepartment) {
-      updateDepartment(defaultDepartment);
-      setCookie("department", JSON.stringify(defaultDepartment));
-    } else {
-      setShowConfirmModal(false);
-    }
+    const defaultDepartment: Department = allDepartments.length > 0 ? allDepartments[0] : DEFAULT_DEPARTMENT;
+    updateDepartment(defaultDepartment);
+    setCookie("department", JSON.stringify(defaultDepartment));
   };
 
   return {

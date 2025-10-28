@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import { Department } from '../types/department';
+import { DEFAULT_DEPARTMENT } from '../constants/department';
 
 interface ConfirmCityModalProps {
   department: Department | null;
@@ -43,7 +44,7 @@ export default function ConfirmCityModal({
         {!showSelect ? (
           <>
             <p className="text-lg mb-4">
-              Ваш город — <b>{department?.city || "Неизвестно"}</b>?
+              Ваш город — <b>{department?.city || DEFAULT_DEPARTMENT.city}</b>?
             </p>
             <div className="flex justify-center gap-4">
               <button
@@ -65,16 +66,17 @@ export default function ConfirmCityModal({
             <p className="text-lg mb-3">Выберите ваш город:</p>
             <select
               className="border p-2 rounded w-full mb-4"
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                const departments = departmentsList.length > 0 ? departmentsList : [DEFAULT_DEPARTMENT];
                 onSelectDepartment(
-                  departmentsList.find(
+                  departments.find(
                     (d: Department) => d.city === e.target.value || d.name === e.target.value
-                  ) || null
+                  ) || DEFAULT_DEPARTMENT
                 )
-              }
+              }}
             >
               <option value="">— выбрать —</option>
-              {departmentsList.map((d) => (
+              {(departmentsList.length > 0 ? departmentsList : [DEFAULT_DEPARTMENT]).map((d) => (
                 <option key={d.city} value={d.city}>
                   {d.city} ({d.phone})
                 </option>
