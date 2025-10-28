@@ -1,11 +1,11 @@
-import React from 'react';
+import ReactElement from 'react';
+import PhoneDisplay from './PhoneDisplay';
+import CitySelector from './CitySelector';
+import ConfirmCityModal from './ConfirmCityModal';
+import { useDepartment } from '../hooks/useDepartment';
+import { Department } from '../types/department';
 
-import PhoneDisplay from './PhoneDisplay.jsx';
-import CitySelector from './CitySelector.jsx';
-import ConfirmCityModal from './ConfirmCityModal.jsx';
-import { useDepartment } from '../hooks/useDepartment.js';
-
-export default function Header() {
+export default function Header(): ReactElement {
   const {
     department,
     allDepartments,
@@ -23,7 +23,7 @@ export default function Header() {
       <CitySelector
         currentDepartment={department}
         allDepartments={allDepartments}
-        onChange={(selectedDepartment) => {
+        onChange={(selectedDepartment: Department) => {
           changeDepartment(selectedDepartment);
         }}
       />
@@ -34,7 +34,7 @@ export default function Header() {
           departmentsList={departmentsList}
           onConfirm={confirmDepartment}
           onDecline={declineDepartment}
-          onSelectDepartment={(dep) => {
+          onSelectDepartment={(dep: Department | null) => {
             if (dep) changeDepartment(dep);
           }}
           onClose={closeModal}

@@ -1,6 +1,10 @@
-import React from 'react';
+import ReactElement from 'react';
 
-export default function PhoneDisplay({ phone }) {
+interface PhoneDisplayProps {
+  phone?: string;
+}
+
+export default function PhoneDisplay({ phone }: PhoneDisplayProps): ReactElement {
   return (
     <div className="text-center text-xl font-semibold py-4">
       Телефон отдела: <span className="text-blue-600">{phone}</span>

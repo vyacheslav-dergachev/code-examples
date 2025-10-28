@@ -1,7 +1,7 @@
-import React from 'react';
-import { useDepartmentStore } from '../store/departmentStore.js';
+import ReactElement from 'react';
+import { useDepartmentStore } from '../store/departmentStore';
 
-export default function Footer() {
+export default function Footer(): ReactElement | null {
   const { currentDepartment } = useDepartmentStore();
 
   if (!currentDepartment) {

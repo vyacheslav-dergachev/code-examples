@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { getCookie, setCookie } from "../utils/cookies.js";
-import { useDepartmentStore } from "../store/departmentStore.js";
+import { getCookie, setCookie } from "../utils/cookies";
+import { useDepartmentStore } from "../store/departmentStore";
+import { Department } from "../types/department";
 
 export function useDepartment() {
   const {
@@ -16,11 +17,11 @@ export function useDepartment() {
     confirmDepartment: storeConfirmDepartment,
   } = useDepartmentStore();
 
-  const fetchAllDepartments = async () => {
+  const fetchAllDepartments = async (): Promise<Department[]> => {
     try {
       // @TODO: move to api component with ApiClient, use swagger-typescript-api
       const res = await fetch("http://api.code-examples.localhost/departments");
-      const departments = await res.json();
+      const departments: Department[] = await res.json();
       setAllDepartments(departments);
       return departments;
     } catch (e) {
@@ -29,9 +30,9 @@ export function useDepartment() {
   };
 
   useEffect(() => {
-    const initializeDepartment = async () => {
+    const initializeDepartment = async (): Promise<void> => {
       const departments = await fetchAllDepartments();
-      const defaultDepartment = departments.length > 0 ? departments[0] : null;
+      const defaultDepartment: Department | null = departments.length > 0 ? departments[0] : null;
 
       if (!defaultDepartment) {
         setLoading(false);
@@ -41,9 +42,9 @@ export function useDepartment() {
       const existing = getCookie("department");
       if (existing) {
         try {
-          const parsedDepartment = JSON.parse(existing);
+          const parsedDepartment: Department = JSON.parse(existing);
           const isValidDepartment = departments.some(
-            dept => dept.city === parsedDepartment.city
+            (dept: Department) => dept.city === parsedDepartment.city
           );
 
           if (isValidDepartment) {
@@ -58,22 +59,22 @@ export function useDepartment() {
         }
       }
 
-      const timeout = setTimeout(() => {
+      const timeout: NodeJS.Timeout = setTimeout(() => {
         setCurrentDepartment(defaultDepartment);
         setShowConfirmModal(true);
         setLoading(false);
       }, 3000);
 
       try {
-        let detectedDepartment = defaultDepartment;
+        let detectedDepartment: Department = defaultDepartment;
 
         // @TODO: move to api component with ApiClient, use swagger-typescript-api
         const res = await fetch("http://api.code-examples.localhost/department-by-ip");
-        const data = await res.json();
+        const data: Department = await res.json();
 
         if (data && data.city) {
-          const matchingDepartment = departments.find(
-            dept => dept.city === data.city
+          const matchingDepartment: Department | undefined = departments.find(
+            (dept: Department) => dept.city === data.city
           );
           if (matchingDepartment) {
             detectedDepartment = matchingDepartment;
@@ -107,13 +108,13 @@ export function useDepartment() {
     }
   };
 
-  const changeDepartment = (dep) => {
+  const changeDepartment = (dep: Department) => {
     updateDepartment(dep);
     setCookie("department", JSON.stringify(dep));
   };
 
   const closeModal = () => {
-    const defaultDepartment = allDepartments.length > 0 ? allDepartments[0] : null;
+    const defaultDepartment: Department | null = allDepartments.length > 0 ? allDepartments[0] : null;
     if (defaultDepartment) {
       updateDepartment(defaultDepartment);
       setCookie("department", JSON.stringify(defaultDepartment));

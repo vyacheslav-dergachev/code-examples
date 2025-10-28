@@ -1,12 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.jsx';
+import App from './App';
 import '../styles/app.css';
 
-console.log('React main.jsx loaded');
+console.log('React main.tsx loaded');
 
 // Find the container element
-const container = document.getElementById('react-app');
+const container: HTMLElement | null = document.getElementById('react-app');
 
 console.log('Container found:', container);
 

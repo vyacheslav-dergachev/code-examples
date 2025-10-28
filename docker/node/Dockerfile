@@ -10,9 +10,9 @@ ARG GROUP_NAME=www-user
 ###
 ### Installing the Yarn
 ###
-RUN corepack enable && \
-    yarn set version ${YARN_VERSION} && \
-    yarn -v
+#RUN corepack enable && \
+#    yarn set version ${YARN_VERSION} && \
+#    yarn -v
 
 ###
 ### Adding a system user for an application
@@ -27,7 +27,7 @@ USER ${USER_NAME}
 VOLUME ["/var/www/project"]
 
 WORKDIR /var/www/project
-
-CMD yarn && yarn dev
+#
+#CMD yarn && yarn dev
 
 EXPOSE 3000

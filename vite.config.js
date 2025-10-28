@@ -24,7 +24,7 @@ export default defineConfig({
         // Main app entry point
         app: resolve(fileURLToPath(new URL('.', import.meta.url)), 'assets/app.js'),
         // React app entry point
-        react: resolve(fileURLToPath(new URL('.', import.meta.url)), 'assets/src/main.jsx'),
+        react: resolve(fileURLToPath(new URL('.', import.meta.url)), 'assets/src/main.tsx'),
       },
     },
     // Output directory
